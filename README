@@ -1,0 +1,8 @@
+Aplikacja odpowiedzialna za pobieranie głosów od wyborców. Dane na temat kandydatów są pobierane od aplikacji serwera
+eksponowane do widoku bierzącej aplikacji, gdzie można dokonać głosu. Po oddaniu głosu jest on wysyłany do aplikacji
+zczytującej wszystkie głosy.
+
+Dane uwierzytelniające takie jak pesel czy numer i seria dowodu osobistego nie mają ograniczeń co do ilości znaków czy też cyfr, liczb itp.
+Z założenia aplikacja ta ma służyć nie tylko w Polsce. co za tym idzie nie mozna ograniczac zawartości/długości pól uwierzytelniających.
+
+Należy pamiętać że wszystkie głosy są anonimowe.

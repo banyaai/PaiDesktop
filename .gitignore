@@ -1,0 +1,9 @@
+*.o
+*.swp
+dist
+*.class
+*.jar
+build
+private
+src/paidesktop/build/
+nbproject/
