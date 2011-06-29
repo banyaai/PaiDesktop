@@ -49,10 +49,6 @@ public class PaiDesktopView extends javax.swing.JFrame {
         AnonymousInfoPanel = new javax.swing.JPanel();
         AnonymousInfoLabel = new javax.swing.JLabel();
         AuthorizationCheckPanel = new javax.swing.JPanel();
-        PersonIDLabel = new javax.swing.JLabel();
-        DocumentIDLabel = new javax.swing.JLabel();
-        PersonIDText = new javax.swing.JTextField();
-        DocumentIDText = new javax.swing.JTextField();
         OKButton = new javax.swing.JButton();
         CancelButton = new javax.swing.JButton();
         VotePanel = new javax.swing.JPanel();
@@ -85,10 +81,6 @@ public class PaiDesktopView extends javax.swing.JFrame {
                 .addGap(121, 121, 121))
         );
 
-        PersonIDLabel.setText(bundle.getString("PersonIDLabel.Text")); // NOI18N
-
-        DocumentIDLabel.setText(bundle.getString("DocumentIDLabel.Text")); // NOI18N
-
         OKButton.setText(bundle.getString("OKButton.Text")); // NOI18N
         OKButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,18 +100,8 @@ public class PaiDesktopView extends javax.swing.JFrame {
         AuthorizationCheckPanelLayout.setHorizontalGroup(
             AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AuthorizationCheckPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(AuthorizationCheckPanelLayout.createSequentialGroup()
-                        .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(DocumentIDLabel)
-                            .addComponent(PersonIDLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(PersonIDText)
-                            .addComponent(DocumentIDText, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
-                        .addGap(120, 120, 120))
-                    .addComponent(OKButton))
+                .addGap(410, 410, 410)
+                .addComponent(OKButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(CancelButton)
                 .addContainerGap(733, Short.MAX_VALUE))
@@ -127,21 +109,10 @@ public class PaiDesktopView extends javax.swing.JFrame {
         AuthorizationCheckPanelLayout.setVerticalGroup(
             AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(AuthorizationCheckPanelLayout.createSequentialGroup()
-                .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(AuthorizationCheckPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(PersonIDLabel)
-                            .addComponent(PersonIDText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(DocumentIDLabel)
-                            .addComponent(DocumentIDText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(AuthorizationCheckPanelLayout.createSequentialGroup()
-                        .addGap(78, 78, 78)
-                        .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(OKButton)
-                            .addComponent(CancelButton))))
+                .addGap(78, 78, 78)
+                .addGroup(AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(OKButton)
+                    .addComponent(CancelButton))
                 .addContainerGap(194, Short.MAX_VALUE))
         );
 
@@ -226,7 +197,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
                 .addComponent(VoteButtonCheckPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(368, Short.MAX_VALUE))
+                .addContainerGap(371, Short.MAX_VALUE))
         );
         VotePanelLayout.setVerticalGroup(
             VotePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,66 +240,48 @@ public class PaiDesktopView extends javax.swing.JFrame {
 
     private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
         // TODO add your handling code here:
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("paidesktop.properties/PaiDesktopView");
 
-        if (!checkText(PersonIDText.getText())) {
-            JOptionPane.showMessageDialog(null, bundle.getString("PersonID.WrongString"));
-        } else if (!checkText(DocumentIDText.getText())) {
-            JOptionPane.showMessageDialog(null, bundle.getString("DocumentID.WrongString"));
-        } else {
-
-            int choice = JOptionPane.showConfirmDialog(null, bundle.getString("CheckAuthenticationData.Text") + "\n\n" + bundle.getString("PersonIDLabel.Text")
-                    + PersonIDText.getText() + "\n" + bundle.getString("DocumentIDLabel.Text") + DocumentIDText.getText());
 //      if("Yes") then buduj panel glosowania
-            if (choice == 0) {
-                AuthorizationPanel.setVisible(false);
-                VotePanel.setVisible(true);
+
+        AuthorizationPanel.setVisible(false);
+        VotePanel.setVisible(true);
 
 
-                javax.swing.GroupLayout VoteButtonCheckPanelLayout = new javax.swing.GroupLayout(VoteButtonCheckPanel);
-                ParallelGroup parallelGroup1 = VoteButtonCheckPanelLayout.createParallelGroup();
-                SequentialGroup sequentialGroup = VoteButtonCheckPanelLayout.createSequentialGroup();
-                sequentialGroup.addGap(32, 32, 32);
-                for (int i = 0; i < candidatesList.size(); i++) {
-                    jRadioButton1[i] = new JRadioButton(candidatesList.get(i).getName()); // wywalic
-                    System.out.println(jRadioButton1[i].getText());
-                    parallelGroup1.addComponent(jRadioButton1[i]);
-                    sequentialGroup.addComponent(jRadioButton1[i]);
-                    sequentialGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED);
-                    candidatesButtonGroup.add(jRadioButton1[i]);
-                }
-
-                sequentialGroup.addContainerGap(/*przesuwanie w zaleznosci od ilosci kandydatow*/445 - 26 * candidatesList.size(), Short.MAX_VALUE);
-
-                VoteButtonCheckPanel.setLayout(VoteButtonCheckPanelLayout);
-                VoteButtonCheckPanelLayout.setHorizontalGroup(
-                        VoteButtonCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).
-                        addGroup(VoteButtonCheckPanelLayout.createSequentialGroup().addContainerGap().addGroup(parallelGroup1).addContainerGap(175, Short.MAX_VALUE)));
-
-                VoteButtonCheckPanelLayout.setVerticalGroup(
-                        VoteButtonCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(sequentialGroup));
-
-                javax.swing.GroupLayout VotePanelLayout = new javax.swing.GroupLayout(VotePanel);
-                VotePanel.setLayout(VotePanelLayout);
-                VotePanelLayout.setHorizontalGroup(
-                        VotePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(VotePanelLayout.createSequentialGroup().addComponent(VoteButtonCheckPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(1025, Short.MAX_VALUE)));
-                VotePanelLayout.setVerticalGroup(
-                        VotePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(VoteButtonCheckPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-
-            } //      if("No") then nie rob nic
-            else if (choice == -1) {
-            } //      if("Cancel") then przerwij glosowanie
-            else {
-                PersonIDText.setText("");
-                DocumentIDText.setText("");
-            }
+        javax.swing.GroupLayout VoteButtonCheckPanelLayout = new javax.swing.GroupLayout(VoteButtonCheckPanel);
+        ParallelGroup parallelGroup1 = VoteButtonCheckPanelLayout.createParallelGroup();
+        SequentialGroup sequentialGroup = VoteButtonCheckPanelLayout.createSequentialGroup();
+        sequentialGroup.addGap(32, 32, 32);
+        for (int i = 0; i < candidatesList.size(); i++) {
+            jRadioButton1[i] = new JRadioButton(candidatesList.get(i).getName()); // wywalic
+            System.out.println(jRadioButton1[i].getText());
+            parallelGroup1.addComponent(jRadioButton1[i]);
+            sequentialGroup.addComponent(jRadioButton1[i]);
+            sequentialGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED);
+            candidatesButtonGroup.add(jRadioButton1[i]);
         }
+
+        sequentialGroup.addContainerGap(/*przesuwanie w zaleznosci od ilosci kandydatow*/445 - 26 * candidatesList.size(), Short.MAX_VALUE);
+
+        VoteButtonCheckPanel.setLayout(VoteButtonCheckPanelLayout);
+        VoteButtonCheckPanelLayout.setHorizontalGroup(
+                VoteButtonCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).
+                addGroup(VoteButtonCheckPanelLayout.createSequentialGroup().addContainerGap().addGroup(parallelGroup1).addContainerGap(175, Short.MAX_VALUE)));
+
+        VoteButtonCheckPanelLayout.setVerticalGroup(
+                VoteButtonCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(sequentialGroup));
+
+        javax.swing.GroupLayout VotePanelLayout = new javax.swing.GroupLayout(VotePanel);
+        VotePanel.setLayout(VotePanelLayout);
+        VotePanelLayout.setHorizontalGroup(
+                VotePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(VotePanelLayout.createSequentialGroup().addComponent(VoteButtonCheckPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap(1025, Short.MAX_VALUE)));
+        VotePanelLayout.setVerticalGroup(
+                VotePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(VoteButtonCheckPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+
+
     }//GEN-LAST:event_OKButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
         // TODO add your handling code here:
-        PersonIDText.setText("");
-        DocumentIDText.setText("");
     }//GEN-LAST:event_CancelButtonActionPerformed
 
     private void OKButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButton2ActionPerformed
@@ -360,12 +313,8 @@ public class PaiDesktopView extends javax.swing.JFrame {
     private javax.swing.JButton CacnelButton2;
     private javax.swing.JButton CancelButton;
     private javax.swing.JLabel CandidatesLabel;
-    private javax.swing.JLabel DocumentIDLabel;
-    private javax.swing.JTextField DocumentIDText;
     private javax.swing.JButton OKButton;
     private javax.swing.JButton OKButton2;
-    private javax.swing.JLabel PersonIDLabel;
-    private javax.swing.JTextField PersonIDText;
     private javax.swing.JPanel VoteButtonCheckPanel;
     private javax.swing.JPanel VotePanel;
     private javax.swing.JPanel jPanel1;
