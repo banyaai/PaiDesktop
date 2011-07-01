@@ -6,6 +6,9 @@ package paidesktop;
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -25,7 +28,7 @@ import sun.misc.BASE64Encoder;
  *
  * @author banyaai
  */
-public class GetParameters{
+public class GetParameters {
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
 //    String server_url = "http://localhost:3000";
@@ -34,12 +37,9 @@ public class GetParameters{
     String login = "user";
     String password = "K3JZGDptJmWeN";
     String encodedAuthorization;
+    String votesFile = "glosowanie";
 
     public GetParameters() {
-        ReadWriteFile readWriteFile = new ReadWriteFile();
-//        this.setServer_url(readWriteFile.getGetParameters().getServer_url());
-//        this.setLogin(readWriteFile.getGetParameters().getLogin());
-//        this.setPassword(readWriteFile.getGetParameters().getPassword());
         encodeLoginAndPassword();
         URL url;
         try {
@@ -67,6 +67,52 @@ public class GetParameters{
         }
     }
 
+    public void loadParameters(String filename) throws Exception{
+        FileInputStream fstream = null;
+        try {
+            fstream = new FileInputStream(filename);
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String strLine;
+            String parameter = "";
+            String option = "";
+
+            while ((strLine = br.readLine()) != null) {
+                parameter = strLine.split(" ")[0];
+                option = strLine.split(" ")[2];
+
+                if (parameter.startsWith("server_url")) {
+                    System.out.println("server_url = " + option);
+                    setServer_url(option);
+                }
+                if (parameter.startsWith("login")) {
+                    System.out.println("login = " + option);
+                    setLogin(option);
+                }
+                if (parameter.startsWith("password")) {
+                    System.out.println("password = " + option);
+                    setPassword(option);
+                }
+            }
+            if (getServer_url().isEmpty() || getLogin().isEmpty()
+                    || getPassword().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "B³¹d ³adowania pliku konfiguracyjnego.");
+            }
+            in.close();
+
+        } catch (FileNotFoundException ex) {
+            throw new Exception("Nie znaleziono pliku.");
+        } catch (IOException ex) {
+            throw new Exception("Blad wejscia/wyjscia.");
+        } finally {
+            try {
+                fstream.close();
+            } catch (IOException ex) {
+                throw new Exception("Blad wejscia/wyjscia.");
+            }
+        }
+    }
+
     public void startThread() {
         new SendResult().start();
     }
@@ -81,39 +127,8 @@ public class GetParameters{
         for (int i = 0; i < candidatesList.size(); i++) {
             if (candidate.equals(candidatesList.get(i))) {
                 candidatesList.get(i).increaseVotes();
-                System.out.println("glosy " + candidatesList.get(i).getVotes());
             }
         }
-
-//        System.out.println("wysylka");
-//        HttpURLConnection httpCon;
-//        OutputStream out = null;
-//        URL url;
-//
-//        try {
-//            url = new URL(server_url2 + "/api/" + candidate.getId() + "?votes=" + 1 /*candidate.getVotes()*/);
-//            System.out.println(url);
-//            httpCon = (HttpURLConnection) url.openConnection();
-//            httpCon.setDoOutput(true);
-//            httpCon.setRequestMethod("PUT");
-//            httpCon.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-//            out = httpCon.getOutputStream();
-//            out.close();
-//            System.out.println("otrzymano: " + httpCon.getResponseMessage());
-//            System.out.println("otrzymano: " + httpCon.getResponseCode());
-//        } catch (Exception ex) {
-//            // ex.printStackTrace();
-//            System.out.println("B³¹d po³¹czenia z serwerem, nastêpna próba nast¹pi za 5minut.");
-//        } finally {
-//            if (out != null) {
-//                try {
-//                    out.close();
-//                } catch (IOException ex) {
-//                    Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//            }
-//        }
-
     }
 
     public class SendResult extends Thread {
@@ -128,6 +143,7 @@ public class GetParameters{
         @Override
         public void run() {
             System.out.println("wysylka");
+            SaveVotes saveVotes = new SaveVotes();
             HttpURLConnection httpCon;
             URL url;
             while (true) {
@@ -145,8 +161,10 @@ public class GetParameters{
                             out.close();
                             System.out.println("otrzymano: " + httpCon.getResponseMessage());
                             System.out.println("otrzymano: " + httpCon.getResponseCode());
+                            //uaktualnienie wynikow w pliku
+                            saveVotes.saveVotes(votesFile, toStringVotes());
                         } catch (Exception ex) {
-                             ex.printStackTrace();
+                            ex.printStackTrace();
                             System.out.println("B³¹d po³¹czenia z serwerem, nastêpna próba nast¹pi za 5minut.");
                             try {
                                 this.sleep(300000);
@@ -167,42 +185,6 @@ public class GetParameters{
                     }
                 }
             }
-//            while (notSend) {
-//                try {
-//                    url = new URL(server_url2 + "/api/" + candidate.getId() + "?votes=" + 1 /*candidate.getVotes()*/);
-//                    System.out.println(url);
-//                    httpCon = (HttpURLConnection) url.openConnection();
-//                    httpCon.setDoOutput(true);
-//                    httpCon.setRequestMethod("PUT");
-//                    httpCon.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-//                    out = httpCon.getOutputStream();
-//                    out.close();
-//                    System.out.println("otrzymano: " + httpCon.getResponseMessage());
-//                    System.out.println("otrzymano: " + httpCon.getResponseCode());
-//                    if (httpCon.getResponseCode() == 200) {
-//                        notSend = false;
-//                    }
-//                } catch (Exception ex) {
-//
-//                    // ex.printStackTrace();
-//                    System.out.println("B³¹d po³¹czenia z serwerem, nastêpna próba nast¹pi za 5minut.");
-//                    try {
-//                        this.sleep(300000);
-//                        continue;
-//                    } catch (InterruptedException ex1) {
-//                        Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex1);
-//                    }
-//                } finally {
-//                    if (out != null) {
-//                        try {
-//                            out.close();
-//                        } catch (IOException ex) {
-//                            Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    }
-//                }
-//            }
-
         }
     };
 
@@ -236,5 +218,14 @@ public class GetParameters{
 
     public ArrayList<Candidate> getCandidatesList() {
         return candidatesList;
+    }
+
+
+    public String toStringVotes() {
+        String tmp = "";
+        for(int i = 0; i < candidatesList.size(); i++){
+            tmp= tmp + candidatesList.get(i).getName() + ", votes " + candidatesList.get(i).getAllVotes() + "\n";
+        }
+        return tmp;
     }
 }

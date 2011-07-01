@@ -12,6 +12,8 @@ package paidesktop;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
@@ -26,17 +28,17 @@ public class PaiDesktopView extends javax.swing.JFrame {
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
     GetParameters getParameters;
-//    ActionListener actionListener = new java.awt.event.ActionListener() {
-//
-//        public void actionPerformed(java.awt.event.ActionEvent evt) {
-//            activeButton = (JRadioButton) evt.getSource();
-//            System.out.println("asdf" + activeButton.getName());
-//        }
-//    };
+    String filename = "/home/banyaai/paidesktop.config";
+
 
     /** Creates new form PaiDesktopView */
-    public PaiDesktopView() {
+    public PaiDesktopView(){
         getParameters = new GetParameters();
+        try {
+            getParameters.loadParameters(filename);
+        } catch (Exception ex) {
+            Logger.getLogger(PaiDesktopView.class.getName()).log(Level.SEVERE, null, ex);
+        }
         getParameters.startThread();
         candidatesList = getParameters.getCandidatesList();
         candidatesButtons = new JRadioButton[candidatesList.size()];
@@ -53,8 +55,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
         SequentialGroup sequentialGroup = VoteButtonCheckPanelLayout.createSequentialGroup();
         sequentialGroup.addGap(32, 32, 32);
         for (int i = 0; i < candidatesList.size(); i++) {
-            candidatesButtons[i] = new JRadioButton(candidatesList.get(i).getName()); // wywalic
-//            System.out.println(jRadioButton1[i].getText());
+            candidatesButtons[i] = new JRadioButton(candidatesList.get(i).getName());
             parallelGroup1.addComponent(candidatesButtons[i]);
             sequentialGroup.addComponent(candidatesButtons[i]);
             sequentialGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED);
@@ -240,7 +241,6 @@ public class PaiDesktopView extends javax.swing.JFrame {
 
             if (selectedButton != null) {
                 for (Candidate c : candidatesList) {
-                    System.out.println(selectedButton.getText());
                     if (c.getName().compareTo(selectedButton.getText()) == 0) {
                         getParameters.sendResults(c);
                         break;

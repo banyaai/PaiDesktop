@@ -14,16 +14,14 @@ public class Candidate {
     private String name;
     private String party;
     private int votes;
+    private int allVotes;
 
     public Candidate() {
     }
 
     public void increaseVotes() {
         votes++;
-    }
-
-    public void decreaseVotes() {
-        votes--;
+        allVotes++;
     }
 
     public int getId() {
@@ -49,5 +47,9 @@ public class Candidate {
     @Override
     public String toString() {
         return name + ", " + party;
+    }
+
+    public int getAllVotes() {
+        return allVotes;
     }
 }
