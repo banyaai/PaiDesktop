@@ -241,7 +241,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
 
             if (selectedButton != null) {
                 for (Candidate c : candidatesList) {
-                    if (c.getName().compareTo(selectedButton.getText()) == 0) {
+                    if (c.getName().compareTo(selectedButton.getText()) == 0 && sendVote) {
                         getParameters.sendResults(c);
                         break;
                     }
