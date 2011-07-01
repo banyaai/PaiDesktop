@@ -18,6 +18,14 @@ public class Candidate {
     public Candidate() {
     }
 
+    public void increaseVotes() {
+        votes++;
+    }
+
+    public void decreaseVotes() {
+        votes--;
+    }
+
     public int getId() {
         return id;
     }

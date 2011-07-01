@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import sun.misc.BASE64Encoder;
  *
  * @author banyaai
  */
-public class GetParameters implements WebServiceClient {
+public class GetParameters{
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
 //    String server_url = "http://localhost:3000";
@@ -35,6 +36,10 @@ public class GetParameters implements WebServiceClient {
     String encodedAuthorization;
 
     public GetParameters() {
+        ReadWriteFile readWriteFile = new ReadWriteFile();
+//        this.setServer_url(readWriteFile.getGetParameters().getServer_url());
+//        this.setLogin(readWriteFile.getGetParameters().getLogin());
+//        this.setPassword(readWriteFile.getGetParameters().getPassword());
         encodeLoginAndPassword();
         URL url;
         try {
@@ -62,6 +67,10 @@ public class GetParameters implements WebServiceClient {
         }
     }
 
+    public void startThread() {
+        new SendResult().start();
+    }
+
     private void encodeLoginAndPassword() {
         BASE64Encoder enc = new sun.misc.BASE64Encoder();
         String loginpassword = login + ":" + password;
@@ -69,7 +78,13 @@ public class GetParameters implements WebServiceClient {
     }
 
     public void sendResults(Candidate candidate) {
-        new SendResult(candidate).start();
+        for (int i = 0; i < candidatesList.size(); i++) {
+            if (candidate.equals(candidatesList.get(i))) {
+                candidatesList.get(i).increaseVotes();
+                System.out.println("glosy " + candidatesList.get(i).getVotes());
+            }
+        }
+
 //        System.out.println("wysylka");
 //        HttpURLConnection httpCon;
 //        OutputStream out = null;
@@ -104,53 +119,89 @@ public class GetParameters implements WebServiceClient {
     public class SendResult extends Thread {
 
         Candidate candidate;
-        public SendResult(Candidate candidate) {
+
+        public SendResult() {
             super("SendResult");
-            this.candidate = candidate;
+
         }
 
         @Override
         public void run() {
             System.out.println("wysylka");
             HttpURLConnection httpCon;
-            OutputStream out = null;
             URL url;
-            boolean notSend = true;
-            while (notSend) {
-                try {
-                    url = new URL(server_url + "/api/" + candidate.getId() + "?votes=" + 1 /*candidate.getVotes()*/);
-                    System.out.println(url);
-                    httpCon = (HttpURLConnection) url.openConnection();
-                    httpCon.setDoOutput(true);
-                    httpCon.setRequestMethod("PUT");
-                    httpCon.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
-                    out = httpCon.getOutputStream();
-                    out.close();
-                    System.out.println("otrzymano: " + httpCon.getResponseMessage());
-                    System.out.println("otrzymano: " + httpCon.getResponseCode());
-                    if (httpCon.getResponseCode() == 200) {
-                        notSend = false;
-                    }
-                } catch (Exception ex) {
-
-                        // ex.printStackTrace();
-                        System.out.println("B³¹d po³¹czenia z serwerem, nastêpna próba nast¹pi za 5minut.");
-                    try {
-                        this.sleep(3000);
-                        continue;
-                    } catch (InterruptedException ex1) {
-                        Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex1);
-                    }
-                } finally {
-                    if (out != null) {
+            while (true) {
+                OutputStream out = null;
+                for (int i = 0; i < candidatesList.size(); i++) {
+                    if (candidatesList.get(i).getVotes() > 0) {
                         try {
+                            url = new URL(server_url + "/api/" + candidatesList.get(i).getId() + "?votes=" + candidatesList.get(i).getVotes());
+                            System.out.println(url);
+                            httpCon = (HttpURLConnection) url.openConnection();
+                            httpCon.setDoOutput(true);
+                            httpCon.setRequestMethod("PUT");
+                            httpCon.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+                            out = httpCon.getOutputStream();
                             out.close();
-                        } catch (IOException ex) {
-                            Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("otrzymano: " + httpCon.getResponseMessage());
+                            System.out.println("otrzymano: " + httpCon.getResponseCode());
+                        } catch (Exception ex) {
+                             ex.printStackTrace();
+                            System.out.println("B³¹d po³¹czenia z serwerem, nastêpna próba nast¹pi za 5minut.");
+                            try {
+                                this.sleep(300000);
+                                continue;
+                            } catch (InterruptedException ex1) {
+                                Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex1);
+                            }
+                        } finally {
+                            if (out != null) {
+                                try {
+                                    out.close();
+                                } catch (IOException ex) {
+                                    Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
                         }
+                        candidatesList.get(i).setVotes(0);
                     }
                 }
             }
+//            while (notSend) {
+//                try {
+//                    url = new URL(server_url2 + "/api/" + candidate.getId() + "?votes=" + 1 /*candidate.getVotes()*/);
+//                    System.out.println(url);
+//                    httpCon = (HttpURLConnection) url.openConnection();
+//                    httpCon.setDoOutput(true);
+//                    httpCon.setRequestMethod("PUT");
+//                    httpCon.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+//                    out = httpCon.getOutputStream();
+//                    out.close();
+//                    System.out.println("otrzymano: " + httpCon.getResponseMessage());
+//                    System.out.println("otrzymano: " + httpCon.getResponseCode());
+//                    if (httpCon.getResponseCode() == 200) {
+//                        notSend = false;
+//                    }
+//                } catch (Exception ex) {
+//
+//                    // ex.printStackTrace();
+//                    System.out.println("B³¹d po³¹czenia z serwerem, nastêpna próba nast¹pi za 5minut.");
+//                    try {
+//                        this.sleep(300000);
+//                        continue;
+//                    } catch (InterruptedException ex1) {
+//                        Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex1);
+//                    }
+//                } finally {
+//                    if (out != null) {
+//                        try {
+//                            out.close();
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//                }
+//            }
 
         }
     };
@@ -159,16 +210,28 @@ public class GetParameters implements WebServiceClient {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public String targetNamespace() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String getLogin() {
+        return login;
     }
 
-    public String wsdlLocation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public Class<? extends Annotation> annotationType() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getServer_url() {
+        return server_url;
+    }
+
+    public void setServer_url(String server_url) {
+        this.server_url = server_url;
     }
 
     public ArrayList<Candidate> getCandidatesList() {
