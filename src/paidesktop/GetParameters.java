@@ -2,41 +2,98 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package paidesktop;
 
+import com.google.gson.Gson;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.annotation.Annotation;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.ws.WebServiceClient;
+import sun.misc.BASE64Encoder;
 
 /**
  *
  * @author banyaai
  */
-public class GetParameters implements WebServiceClient{
+public class GetParameters implements WebServiceClient {
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
+//    String server_url = "http://localhost:3000";
+    String server_url = "http://pai.heroku.com";
+    String login = "user";
+    String password = "K3JZGDptJmWeN";
+    String encodedAuthorization;
 
     public GetParameters() {
-        Candidate kandydat1 = new Candidate();
-        Candidate kandydat2 = new Candidate();
-        Candidate kandydat3 = new Candidate();
+        encodeLoginAndPassword();
+        URL url;
+        try {
+            url = new URL(server_url + "/api");
+            URLConnection httpCon = url.openConnection();
+            httpCon.setRequestProperty("Accept", "application/json");
+            httpCon.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+            BufferedReader in = new BufferedReader(new InputStreamReader(httpCon.getInputStream()));
+            String inputLine;
+            String result = new String();
 
-        kandydat1.setID(1);
-        kandydat1.setName("Jaros³aw Duraj");
-        kandydat2.setID(2);
-        kandydat2.setName("Maciej Ga³kiewicz");
-        kandydat3.setID(3);
-        kandydat3.setName("Marcin Niedzielewski");
-        candidatesList.add(kandydat1);
-        candidatesList.add(kandydat2);
-        candidatesList.add(kandydat3);
+            while ((inputLine = in.readLine()) != null) {
+                result += inputLine;
+            }
+            in.close();
+
+            // Parse Json to candidates array
+            Gson gson = new Gson();
+            Candidate[] candidates = gson.fromJson(result, Candidate[].class);
+            for (int i = 0; i < candidates.length; i++) {
+                candidatesList.add(candidates[i]);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    private void encodeLoginAndPassword() {
+        BASE64Encoder enc = new sun.misc.BASE64Encoder();
+        String loginpassword = login + ":" + password;
+        encodedAuthorization = enc.encode(loginpassword.getBytes());
+    }
+
+    public void sendResults(Candidate candidate) {
+        System.out.println("wysylka");
+        HttpURLConnection httpCon;
+        OutputStream out = null;
+        URL url;
+        try {
+            url = new URL(server_url + "/api/" + candidate.getId() + "?votes=" + 1 /*candidate.getVotes()*/);
+            System.out.println(url);
+            httpCon = (HttpURLConnection) url.openConnection();
+            httpCon.setDoOutput(true);
+            httpCon.setRequestMethod("PUT");
+            httpCon.setRequestProperty("Authorization", "Basic " + encodedAuthorization);
+            out = httpCon.getOutputStream();
+            out.close();
+            System.out.println("otrzymano: " + httpCon.getResponseMessage());
+            System.out.println("otrzymano: " + httpCon.getResponseCode());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
 
     public String name() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -57,5 +114,4 @@ public class GetParameters implements WebServiceClient{
     public ArrayList<Candidate> getCandidatesList() {
         return candidatesList;
     }
-
 }

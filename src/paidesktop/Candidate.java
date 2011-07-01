@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package paidesktop;
 
 /**
@@ -11,23 +10,36 @@ package paidesktop;
  */
 public class Candidate {
 
-    String name;
-    Integer ID;
+    private int id;
+    private String name;
+    private String party;
+    private int votes;
 
-    public Integer getID() {
-        return ID;
+    public Candidate() {
     }
 
-    public void setID(Integer ID) {
-        this.ID = ID;
+    public int getId() {
+        return id;
+    }
+
+    public String getParty() {
+        return party;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public String toString() {
+        return name + ", " + party;
     }
-    
 }

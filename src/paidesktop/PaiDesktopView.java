@@ -11,6 +11,7 @@
 package paidesktop;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
@@ -24,14 +25,23 @@ import javax.swing.JRadioButton;
 public class PaiDesktopView extends javax.swing.JFrame {
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
+    GetParameters getParameters;
+//    ActionListener actionListener = new java.awt.event.ActionListener() {
+//
+//        public void actionPerformed(java.awt.event.ActionEvent evt) {
+//            activeButton = (JRadioButton) evt.getSource();
+//            System.out.println("asdf" + activeButton.getName());
+//        }
+//    };
 
     /** Creates new form PaiDesktopView */
     public PaiDesktopView() {
-        GetParameters getParameters = new GetParameters();
+        getParameters = new GetParameters();
         candidatesList = getParameters.getCandidatesList();
-        jRadioButton1 = new JRadioButton[candidatesList.size()];
+        candidatesButtons = new JRadioButton[candidatesList.size()];
         for (int i = 0; i < candidatesList.size(); i++) {
-            jRadioButton1[i] = new JRadioButton(candidatesList.get(i).getName());
+            candidatesButtons[i] = new JRadioButton(candidatesList.get(i).getName());
+//            jRadioButton1[i].addActionListener(actionListener);
         }
         initComponents();
     }
@@ -56,7 +66,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
         CandidatesLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         OKButton2 = new javax.swing.JButton();
-        CacnelButton2 = new javax.swing.JButton();
+        CancelButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
@@ -104,7 +114,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
                 .addComponent(OKButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(CancelButton)
-                .addContainerGap(733, Short.MAX_VALUE))
+                .addContainerGap(790, Short.MAX_VALUE))
         );
         AuthorizationCheckPanelLayout.setVerticalGroup(
             AuthorizationCheckPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,7 +161,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
             .addGroup(VoteButtonCheckPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(CandidatesLabel)
-                .addContainerGap(423, Short.MAX_VALUE))
+                .addContainerGap(428, Short.MAX_VALUE))
         );
 
         OKButton2.setText("OKButton");
@@ -161,10 +171,10 @@ public class PaiDesktopView extends javax.swing.JFrame {
             }
         });
 
-        CacnelButton2.setText("CancelButton");
-        CacnelButton2.addActionListener(new java.awt.event.ActionListener() {
+        CancelButton2.setText("CancelButton");
+        CancelButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CacnelButton2ActionPerformed(evt);
+                CancelButton2ActionPerformed(evt);
             }
         });
 
@@ -176,16 +186,16 @@ public class PaiDesktopView extends javax.swing.JFrame {
                 .addGap(73, 73, 73)
                 .addComponent(OKButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(CacnelButton2)
+                .addComponent(CancelButton2)
                 .addContainerGap(347, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(378, Short.MAX_VALUE)
+                .addContainerGap(381, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(OKButton2)
-                    .addComponent(CacnelButton2))
+                    .addComponent(CancelButton2))
                 .addGap(23, 23, 23))
         );
 
@@ -197,7 +207,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
                 .addComponent(VoteButtonCheckPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(371, Short.MAX_VALUE))
+                .addContainerGap(440, Short.MAX_VALUE))
         );
         VotePanelLayout.setVerticalGroup(
             VotePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,12 +262,12 @@ public class PaiDesktopView extends javax.swing.JFrame {
         SequentialGroup sequentialGroup = VoteButtonCheckPanelLayout.createSequentialGroup();
         sequentialGroup.addGap(32, 32, 32);
         for (int i = 0; i < candidatesList.size(); i++) {
-            jRadioButton1[i] = new JRadioButton(candidatesList.get(i).getName()); // wywalic
-            System.out.println(jRadioButton1[i].getText());
-            parallelGroup1.addComponent(jRadioButton1[i]);
-            sequentialGroup.addComponent(jRadioButton1[i]);
+            candidatesButtons[i] = new JRadioButton(candidatesList.get(i).getName()); // wywalic
+//            System.out.println(jRadioButton1[i].getText());
+            parallelGroup1.addComponent(candidatesButtons[i]);
+            sequentialGroup.addComponent(candidatesButtons[i]);
             sequentialGroup.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED);
-            candidatesButtonGroup.add(jRadioButton1[i]);
+            candidatesButtonGroup.add(candidatesButtons[i]);
         }
 
         sequentialGroup.addContainerGap(/*przesuwanie w zaleznosci od ilosci kandydatow*/445 - 26 * candidatesList.size(), Short.MAX_VALUE);
@@ -289,10 +299,10 @@ public class PaiDesktopView extends javax.swing.JFrame {
         endVote(true);
     }//GEN-LAST:event_OKButton2ActionPerformed
 
-    private void CacnelButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CacnelButton2ActionPerformed
+    private void CancelButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButton2ActionPerformed
         // TODO add your handling code here:
         endVote(false);
-    }//GEN-LAST:event_CacnelButton2ActionPerformed
+    }//GEN-LAST:event_CancelButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -310,8 +320,8 @@ public class PaiDesktopView extends javax.swing.JFrame {
     private javax.swing.JPanel AnonymousInfoPanel;
     private javax.swing.JPanel AuthorizationCheckPanel;
     private javax.swing.JPanel AuthorizationPanel;
-    private javax.swing.JButton CacnelButton2;
     private javax.swing.JButton CancelButton;
+    private javax.swing.JButton CancelButton2;
     private javax.swing.JLabel CandidatesLabel;
     private javax.swing.JButton OKButton;
     private javax.swing.JButton OKButton2;
@@ -319,7 +329,7 @@ public class PaiDesktopView extends javax.swing.JFrame {
     private javax.swing.JPanel VotePanel;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
-    private javax.swing.JRadioButton jRadioButton1[];
+    private javax.swing.JRadioButton candidatesButtons[];
     ButtonGroup candidatesButtonGroup = new ButtonGroup();
 
     void endVote(boolean sendVote) {
@@ -329,22 +339,34 @@ public class PaiDesktopView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, bundle.getString("ThankYou.Text"));
             AuthorizationPanel.setVisible(true);
             VotePanel.setVisible(false);
-        } else {
 
+            JRadioButton selectedButton = null;
+            for (JRadioButton button : candidatesButtons) {
+                if (button.isSelected()) {
+                    selectedButton = button;
+                    break;
+                }
+            }
+
+            if (selectedButton != null) {
+                for (Candidate c : candidatesList) {
+                    System.out.println(selectedButton.getText());
+                    if (c.getName().compareTo(selectedButton.getText()) == 0) {
+                        getParameters.sendResults(c);
+                        break;
+                    }
+                }
+            }
+            candidatesButtonGroup.clearSelection();
+
+        } else {
             int choice = JOptionPane.showConfirmDialog(null, bundle.getString("AreYouSure.Text"));
             if (choice == 0) {
                 JOptionPane.showMessageDialog(null, bundle.getString("ThankYou.Text"));
                 AuthorizationPanel.setVisible(true);
                 VotePanel.setVisible(false);
-                if (candidatesButtonGroup.getSelection() != null) {
-                    //send vote
-                }
             }
         }
-        if (candidatesButtonGroup.getSelection() != null) {
-            candidatesButtonGroup.clearSelection();
-        }
-
     }
 
     boolean checkText(String text) {
