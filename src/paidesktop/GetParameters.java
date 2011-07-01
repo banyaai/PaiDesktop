@@ -28,8 +28,8 @@ public class GetParameters implements WebServiceClient {
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
 //    String server_url = "http://localhost:3000";
-    String server_url = "http://pai.heroku.com";
-    String server_url2 = "http://pai.herokus.com";
+    String server_url = "http://pai-local.heroku.com/";
+    //String server_url2 = "http://pai.herokus.com";
     String login = "user";
     String password = "K3JZGDptJmWeN";
     String encodedAuthorization;
@@ -118,7 +118,7 @@ public class GetParameters implements WebServiceClient {
             boolean notSend = true;
             while (notSend) {
                 try {
-                    url = new URL(server_url2 + "/api/" + candidate.getId() + "?votes=" + 1 /*candidate.getVotes()*/);
+                    url = new URL(server_url + "/api/" + candidate.getId() + "?votes=" + 1 /*candidate.getVotes()*/);
                     System.out.println(url);
                     httpCon = (HttpURLConnection) url.openConnection();
                     httpCon.setDoOutput(true);
