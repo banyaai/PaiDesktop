@@ -88,8 +88,7 @@ public class GetParameters {
                     password = option;
                 }
             }
-            if (getServer_url().isEmpty() || getLogin().isEmpty()
-                    || getPassword().isEmpty()) {
+            if (server_url.isEmpty() || login.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "B³¹d sk³adni pliku konfiguracyjnego.");
             }
             in.close();
@@ -180,18 +179,6 @@ public class GetParameters {
             }
         }
     };
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getServer_url() {
-        return server_url;
-    }
 
     public ArrayList<Candidate> getCandidatesList() {
         return candidatesList;
