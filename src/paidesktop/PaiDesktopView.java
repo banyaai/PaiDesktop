@@ -44,7 +44,6 @@ public class PaiDesktopView extends javax.swing.JFrame {
         candidatesButtons = new JRadioButton[candidatesList.size()];
         for (int i = 0; i < candidatesList.size(); i++) {
             candidatesButtons[i] = new JRadioButton(candidatesList.get(i).getName());
-//            jRadioButton1[i].addActionListener(actionListener);
         }
         initComponents();
         VotePanel.setVisible(true);
@@ -96,8 +95,9 @@ public class PaiDesktopView extends javax.swing.JFrame {
         OKButton2 = new javax.swing.JButton();
         CancelButton2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setExtendedState(MAXIMIZED_BOTH);
+        setResizable(false);
 
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("paidesktop/properties/PaiDesktopView"); // NOI18N
         CandidatesLabel.setText(bundle.getString("CandidatesLabel.Text")); // NOI18N
@@ -255,25 +255,5 @@ public class PaiDesktopView extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, bundle.getString("ThankYou.Text"));
             }
         }
-    }
-
-    boolean checkText(String text) {
-
-        //It can't contain only numbers if it's null or empty...
-        if (text == null || text.length() == 0) {
-            return false;
-        }
-
-        for (int i = 0; i < text.length(); i++) {
-
-            //If we find a non-digit character we return false.
-
-            if (!Character.isLetterOrDigit(text.charAt(i))) {
-                return false;
-            }
-
-        }
-
-        return true;
     }
 }
