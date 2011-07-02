@@ -28,17 +28,17 @@ public class PaiDesktopView extends javax.swing.JFrame {
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
     GetParameters getParameters;
-    String filename = "/home/banyaai/paidesktop.config";
+    String filename = "paidesktop.config";
 
 
     /** Creates new form PaiDesktopView */
     public PaiDesktopView(){
         getParameters = new GetParameters();
-        try {
-            getParameters.loadParameters(filename);
-        } catch (Exception ex) {
-            Logger.getLogger(PaiDesktopView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            getParameters.loadParameters(filename);
+//        } catch (Exception ex) {
+//            Logger.getLogger(PaiDesktopView.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         getParameters.startThread();
         candidatesList = getParameters.getCandidatesList();
         candidatesButtons = new JRadioButton[candidatesList.size()];

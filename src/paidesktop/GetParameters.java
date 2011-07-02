@@ -43,6 +43,11 @@ public class GetParameters {
         encodeLoginAndPassword();
         URL url;
         try {
+            loadParameters("paidesktop.config");
+        } catch (Exception ex) {
+            Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
             url = new URL(server_url + "/api");
             URLConnection httpCon = url.openConnection();
             httpCon.setRequestProperty("Accept", "application/json");
@@ -67,7 +72,7 @@ public class GetParameters {
         }
     }
 
-    public void loadParameters(String filename) throws Exception{
+    public void loadParameters(String filename){
         FileInputStream fstream = null;
         try {
             fstream = new FileInputStream(filename);
@@ -96,19 +101,18 @@ public class GetParameters {
             }
             if (getServer_url().isEmpty() || getLogin().isEmpty()
                     || getPassword().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "B³¹d ³adowania pliku konfiguracyjnego.");
+                JOptionPane.showMessageDialog(null, "B³¹d sk³adni pliku konfiguracyjnego.");
             }
             in.close();
 
         } catch (FileNotFoundException ex) {
-            throw new Exception("Nie znaleziono pliku.");
+            JOptionPane.showMessageDialog(null, "B³¹d ³adowania pliku konfiguracyjnego.");
         } catch (IOException ex) {
-            throw new Exception("Blad wejscia/wyjscia.");
+            JOptionPane.showMessageDialog(null, "B³¹d ³adowania pliku konfiguracyjnego.");
         } finally {
             try {
                 fstream.close();
-            } catch (IOException ex) {
-                throw new Exception("Blad wejscia/wyjscia.");
+            } catch (Exception ex) {
             }
         }
     }
