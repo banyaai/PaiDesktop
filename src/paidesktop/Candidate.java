@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package paidesktop;
 
 /**
@@ -34,10 +30,6 @@ public class Candidate {
 
     public int getVotes() {
         return votes;
-    }
-
-    public void setVotes(int votes) {
-        this.votes = votes;
     }
 
     public String getName() {

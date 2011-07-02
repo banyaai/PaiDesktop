@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package paidesktop;
 
 import com.google.gson.Gson;
@@ -12,16 +8,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.annotation.Annotation;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.xml.ws.WebServiceClient;
 import sun.misc.BASE64Encoder;
 
 /**
@@ -31,11 +24,9 @@ import sun.misc.BASE64Encoder;
 public class GetParameters {
 
     ArrayList<Candidate> candidatesList = new ArrayList<Candidate>();
-//    String server_url = "http://localhost:3000";
-    String server_url = "http://pai-local.heroku.com/";
-    //String server_url2 = "http://pai.herokus.com";
-    String login = "user";
-    String password = "K3JZGDptJmWeN";
+    String server_url;
+    String login;
+    String password;
     String encodedAuthorization;
     String votesFile = "glosowanie";
 
@@ -88,15 +79,13 @@ public class GetParameters {
 
                 if (parameter.startsWith("server_url")) {
                     System.out.println("server_url = " + option);
-                    setServer_url(option);
+                    server_url = option;
                 }
                 if (parameter.startsWith("login")) {
-                    System.out.println("login = " + option);
-                    setLogin(option);
+                    login = option;
                 }
                 if (parameter.startsWith("password")) {
-                    System.out.println("password = " + option);
-                    setPassword(option);
+                    password = option;
                 }
             }
             if (getServer_url().isEmpty() || getLogin().isEmpty()
@@ -192,38 +181,21 @@ public class GetParameters {
         }
     };
 
-    public String name() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public String getLogin() {
         return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getServer_url() {
         return server_url;
-    }
-
-    public void setServer_url(String server_url) {
-        this.server_url = server_url;
     }
 
     public ArrayList<Candidate> getCandidatesList() {
         return candidatesList;
     }
-
 
     public String toStringVotes() {
         String tmp = "";
