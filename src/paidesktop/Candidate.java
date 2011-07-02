@@ -32,6 +32,10 @@ public class Candidate {
         return votes;
     }
 
+    public void setVotes(int votes) {
+        this.votes = votes;
+    }
+
     public String getName() {
         return name;
     }
