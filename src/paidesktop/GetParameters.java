@@ -31,10 +31,10 @@ public class GetParameters {
     String votesFile = "glosowanie";
 
     public GetParameters() {
-        encodeLoginAndPassword();
         URL url;
         try {
             loadParameters("paidesktop.config");
+            encodeLoginAndPassword();
         } catch (Exception ex) {
             Logger.getLogger(GetParameters.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,7 +63,7 @@ public class GetParameters {
         }
     }
 
-    public void loadParameters(String filename){
+    public void loadParameters(String filename) {
         FileInputStream fstream = null;
         try {
             fstream = new FileInputStream(filename);
@@ -186,8 +186,8 @@ public class GetParameters {
 
     public String toStringVotes() {
         String tmp = "";
-        for(int i = 0; i < candidatesList.size(); i++){
-            tmp= tmp + candidatesList.get(i).getName() + ", votes " + candidatesList.get(i).getAllVotes() + "\n";
+        for (int i = 0; i < candidatesList.size(); i++) {
+            tmp = tmp + candidatesList.get(i).getName() + ", votes " + candidatesList.get(i).getAllVotes() + "\n";
         }
         return tmp;
     }
